@@ -2,6 +2,7 @@ package main
 
 import (
 	"hoc-gin/internal/handlers"
+	"hoc-gin/internal/repository"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,8 @@ func main() {
 
 	r := gin.Default()
 
-	userHandler := handlers.NewUserHandler()
+	userRepository := repository.NewSQLUserRepository()
+	userHandler := handlers.NewUserHandler(userRepository)
 	r.GET("/api/v1/users/:id", userHandler.GetUserByUuid)
 	r.POST("/api/v1/users/", userHandler.CreateUser)
 
