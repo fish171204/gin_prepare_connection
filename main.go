@@ -22,4 +22,5 @@ func main() {
 	r.GET("/api/v1/users/:id", userHandler.GetUserByUuid)
 	r.POST("/api/v1/users/", userHandler.CreateUser)
 
+	r.Run(":8080")
 }
