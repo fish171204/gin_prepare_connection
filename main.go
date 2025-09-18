@@ -1,6 +1,7 @@
 package main
 
 import (
+	"hoc-gin/internal/db"
 	"hoc-gin/internal/handlers"
 	"hoc-gin/internal/repository"
 	"log"
@@ -14,6 +15,10 @@ func main() {
 	if err != nil {
 		log.Println("No .env file found")
 	}
+
+	db.InitDB()
+
+	log.Println(db.DB)
 
 	r := gin.Default()
 
