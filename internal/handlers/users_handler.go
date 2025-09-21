@@ -26,9 +26,14 @@ func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
 		return
 	}
 
-	uh.repo.FindById(id)
+	var user models.User
 
-	ctx.JSON(http.StatusOK, gin.H{"data": "Get user by uuid"})
+	if err := uh.repo.FindById(&user, id); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 func (uh *UserHandler) CreateUser(ctx *gin.Context) {
