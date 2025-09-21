@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"hoc-gin/internal/models"
 	"hoc-gin/internal/repository"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgconn"
 	"gorm.io/gorm"
 )
 
@@ -49,6 +51,12 @@ func (uh *UserHandler) CreateUser(ctx *gin.Context) {
 	}
 
 	if err := uh.repo.Create(&user); err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+			ctx.JSON(http.StatusConflict, gin.H{"error": "Email already exist"})
+			return
+		}
+
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
