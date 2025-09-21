@@ -4,8 +4,11 @@ package db
 // go get -u gorm.io/driver/postgres
 
 import (
+	"context"
 	"fmt"
 	"hoc-gin/internal/config"
+	"log"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,6 +32,27 @@ func InitDB() error {
 	if err != nil {
 		return fmt.Errorf("error opening DB connection: %w", err)
 	}
+
+	// Get generic database object sql.DB to use its functions
+	sqlDB, err := DB.DB()
+	if err != nil {
+		return fmt.Errorf("error getting sql.DB: %w", err)
+	}
+
+	sqlDB.SetMaxOpenConns(50)
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetConnMaxLifetime(30 * time.Minute)
+	sqlDB.SetConnMaxIdleTime(30 * time.Minute)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := sqlDB.PingContext(ctx); err != nil {
+		sqlDB.Close()
+		return fmt.Errorf("DB ping error: %w", err)
+	}
+
+	log.Println("Connected")
 
 	return nil
 }
