@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"hoc-gin/internal/models"
 	"hoc-gin/internal/repository"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,13 +20,25 @@ func NewUserHandler(repo repository.UserRepository) *UserHandler {
 }
 
 func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
-	uh.repo.FindById()
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invali user ID"})
+		return
+	}
+
+	uh.repo.FindById(id)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": "Get user by uuid"})
 }
 
 func (uh *UserHandler) CreateUser(ctx *gin.Context) {
-	uh.repo.Create()
+	var user models.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": "Create user"})
+	uh.repo.Create(&user)
+
+	ctx.JSON(http.StatusCreated, gin.H{"data": "Create user"})
 }
