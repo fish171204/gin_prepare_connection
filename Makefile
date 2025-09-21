@@ -1,6 +1,7 @@
 include .env
 export
 
+# Install : go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 CONN_STRING = postgresql://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)
 
 MIGRATION_DIRS = internal/db/migrations
