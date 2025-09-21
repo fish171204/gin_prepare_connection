@@ -20,8 +20,6 @@ func main() {
 		log.Fatal("unable to connect to db")
 	}
 
-	log.Println(db.DB)
-
 	r := gin.Default()
 
 	userRepository := repository.NewSQLUserRepository()
