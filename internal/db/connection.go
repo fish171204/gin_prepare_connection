@@ -19,10 +19,8 @@ func InitDB() error {
 	var err error
 	DB, err = sql.Open("postgres", connStr) // go get github.com/lib/pq
 	if err != nil {
-
 		log.Fatal("unable to use data source name", err)
 	}
-	defer DB.Close()
 
 	DB.SetMaxIdleConns(3)                   // Số kết nối nhàn rỗi tối đa
 	DB.SetMaxOpenConns(3)                   // Số kết nối tối đa
