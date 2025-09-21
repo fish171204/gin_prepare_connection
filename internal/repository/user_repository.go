@@ -1,15 +1,19 @@
 package repository
 
 import (
+	"database/sql"
 	"hoc-gin/internal/models"
 	"log"
 )
 
 type SQLUserRepository struct {
+	db *sql.DB
 }
 
-func NewSQLUserRepository() UserRepository {
-	return &SQLUserRepository{}
+func NewSQLUserRepository(DB *sql.DB) UserRepository {
+	return &SQLUserRepository{
+		db: DB,
+	}
 }
 
 func (ur *SQLUserRepository) Create(user *models.User) {

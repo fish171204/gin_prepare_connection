@@ -22,7 +22,7 @@ func main() {
 
 	r := gin.Default()
 
-	userRepository := repository.NewSQLUserRepository()
+	userRepository := repository.NewSQLUserRepository(db.DB)
 	userHandler := handlers.NewUserHandler(userRepository)
 	r.GET("/api/v1/users/:id", userHandler.GetUserByUuid)
 	r.POST("/api/v1/users/", userHandler.CreateUser)
