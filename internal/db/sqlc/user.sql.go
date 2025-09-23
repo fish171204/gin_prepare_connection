@@ -34,11 +34,9 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-
 SELECT user_id, uuid, name, email, created_at FROM users WHERE uuid = $1
 `
 
-// trả về 1 dòng là :one, còn nhiều dòng là :many
 func (q *Queries) GetUser(ctx context.Context, argUuid uuid.UUID) (User, error) {
 	row := q.db.QueryRow(ctx, getUser, argUuid)
 	var i User
