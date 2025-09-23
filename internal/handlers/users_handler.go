@@ -38,7 +38,10 @@ func (uh *UserHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	uh.repo.Create(ctx, input)
+	user, err := uh.repo.Create(ctx, input)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"data": "Create user"})
+	ctx.JSON(http.StatusCreated, gin.H{"data": user})
 }
