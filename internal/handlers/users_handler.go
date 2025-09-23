@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"database/sql"
+	"errors"
+	"fmt"
 	"hoc-gin/internal/db/sqlc"
 	"hoc-gin/internal/dto"
 	"hoc-gin/internal/repository"
@@ -8,6 +11,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v5"
 )
 
 type UserHandler struct {
@@ -25,13 +30,24 @@ func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
 
 	userUUID, err := uuid.Parse(uuidParam)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invali user ID"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
 	user, err := uh.repo.FindByUuid(ctx, userUUID)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		if errors.Is(err, sql.ErrNoRows) || errors.Is(err, pgx.ErrNoRows) {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+			return
+		}
+
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("Database error: %s", pgErr.Message)})
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
 
