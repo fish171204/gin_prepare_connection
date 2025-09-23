@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"hoc-gin/internal/db/sqlc"
 	"log"
+
+	"github.com/google/uuid"
 )
 
 type SQLUserRepository struct {
@@ -26,6 +28,7 @@ func (ur *SQLUserRepository) Create(ctx context.Context, input sqlc.CreateUserPa
 	return user, nil
 }
 
-func (ur *SQLUserRepository) FindById(id int) {
+func (ur *SQLUserRepository) FindByUuid(ctx context.Context, uuid uuid.UUID) {
+	ur.db.GetUser(ctx, uuid)
 	log.Println("Find by ID")
 }
