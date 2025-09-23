@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"hoc-gin/internal/models"
+	"hoc-gin/internal/db/sqlc"
 	"hoc-gin/internal/repository"
 	"net/http"
 	"strconv"
@@ -32,13 +32,13 @@ func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
 }
 
 func (uh *UserHandler) CreateUser(ctx *gin.Context) {
-	var user models.User
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	var input sqlc.CreateUserParams
+	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	uh.repo.Create(&user)
+	uh.repo.Create(input)
 
 	ctx.JSON(http.StatusCreated, gin.H{"data": "Create user"})
 }

@@ -1,8 +1,8 @@
 package repository
 
-import "hoc-gin/internal/models"
+import "hoc-gin/internal/db/sqlc"
 
 type UserRepository interface {
-	Create(user *models.User)
+	Create(input sqlc.CreateUserParams)
 	FindById(id int)
 }
