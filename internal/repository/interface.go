@@ -6,6 +6,6 @@ import (
 )
 
 type UserRepository interface {
-	Create(ctx context.Context, input sqlc.CreateUserParams)
+	Create(ctx context.Context, input sqlc.CreateUserParams) (sqlc.User, error)
 	FindById(id int)
 }
