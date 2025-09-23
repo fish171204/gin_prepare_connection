@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 	"hoc-gin/internal/config"
+	"hoc-gin/internal/db/sqlc"
 	"log"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var DB string
+var DB *sqlc.Queries
 
 func InitDB() error {
 	connStr := config.NewConfig().DNS()
@@ -33,6 +34,8 @@ func InitDB() error {
 	if err != nil {
 		return fmt.Errorf("error creating DB pool: %v", err)
 	}
+
+	DB = sqlc.New(DBPool)
 
 	if err := DBPool.Ping(ctx); err != nil {
 		return fmt.Errorf("db ping error: %v", err)
