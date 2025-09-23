@@ -29,9 +29,15 @@ func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
 		return
 	}
 
-	uh.repo.FindByUuid(ctx, userUUID)
+	user, err := uh.repo.FindByUuid(ctx, userUUID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": "Get user by uuid"})
+	userDTO := dto.MapUserToDTO(user)
+
+	ctx.JSON(http.StatusOK, gin.H{"data": userDTO})
 }
 
 func (uh *UserHandler) CreateUser(ctx *gin.Context) {
