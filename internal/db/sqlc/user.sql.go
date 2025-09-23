@@ -8,7 +8,7 @@ package sqlc
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/google/uuid"
 )
 
 const createUser = `-- name: CreateUser :one
@@ -39,8 +39,8 @@ SELECT user_id, uuid, name, email, created_at FROM users WHERE uuid = $1
 `
 
 // trả về 1 dòng là :one, còn nhiều dòng là :many
-func (q *Queries) GetUser(ctx context.Context, uuid pgtype.UUID) (User, error) {
-	row := q.db.QueryRow(ctx, getUser, uuid)
+func (q *Queries) GetUser(ctx context.Context, argUuid uuid.UUID) (User, error) {
+	row := q.db.QueryRow(ctx, getUser, argUuid)
 	var i User
 	err := row.Scan(
 		&i.UserID,
