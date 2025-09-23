@@ -9,9 +9,9 @@ import (
 )
 
 type User struct {
-	UserID    int32
-	Uuid      pgtype.UUID
-	Name      string
-	Email     string
-	CreatedAt pgtype.Timestamptz
+	UserID    int32              `json:"user_id"`
+	Uuid      pgtype.UUID        `json:"uuid"`
+	Name      string             `json:"name"`
+	Email     string             `json:"email"`
+	CreatedAt pgtype.Timestamptz `json:"created_at"`
 }
