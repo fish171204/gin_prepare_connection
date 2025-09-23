@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"hoc-gin/internal/db/sqlc"
+	"hoc-gin/internal/dto"
 	"hoc-gin/internal/repository"
 	"net/http"
 	"strconv"
@@ -43,5 +44,7 @@ func (uh *UserHandler) CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"data": user})
+	userDTO := dto.MapUserToDTO(user)
+
+	ctx.JSON(http.StatusCreated, gin.H{"data": userDTO})
 }
