@@ -1,8 +1,11 @@
 package repository
 
-import "hoc-gin/internal/db/sqlc"
+import (
+	"context"
+	"hoc-gin/internal/db/sqlc"
+)
 
 type UserRepository interface {
-	Create(input sqlc.CreateUserParams)
+	Create(ctx context.Context, input sqlc.CreateUserParams)
 	FindById(id int)
 }

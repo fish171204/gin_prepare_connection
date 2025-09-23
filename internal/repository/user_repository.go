@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"hoc-gin/internal/db/sqlc"
 	"log"
 )
@@ -15,7 +16,9 @@ func NewSQLUserRepository(DB *sqlc.Queries) UserRepository {
 	}
 }
 
-func (ur *SQLUserRepository) Create(input sqlc.CreateUserParams) {
+func (ur *SQLUserRepository) Create(ctx context.Context, input sqlc.CreateUserParams) {
+	ur.db.CreateUser(ctx, input)
+
 	log.Println("Create")
 }
 

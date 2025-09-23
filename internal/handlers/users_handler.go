@@ -38,7 +38,7 @@ func (uh *UserHandler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	uh.repo.Create(input)
+	uh.repo.Create(ctx, input)
 
 	ctx.JSON(http.StatusCreated, gin.H{"data": "Create user"})
 }
