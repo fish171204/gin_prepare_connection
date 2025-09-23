@@ -42,6 +42,7 @@ func (uh *UserHandler) CreateUser(ctx *gin.Context) {
 	user, err := uh.repo.Create(ctx, input)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	userDTO := dto.MapUserToDTO(user)

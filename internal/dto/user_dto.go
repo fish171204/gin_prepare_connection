@@ -21,6 +21,6 @@ func MapUserToDTO(user sqlc.User) *UserResponse {
 		Uuid:      user.Uuid,
 		Name:      user.Name,
 		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
+		CreatedAt: user.CreatedAt.Format("2006-01-02"),
 	}
 }
