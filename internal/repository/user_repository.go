@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"hoc-gin/internal/db/sqlc"
-	"log"
 
 	"github.com/google/uuid"
 )
@@ -28,7 +27,11 @@ func (ur *SQLUserRepository) Create(ctx context.Context, input sqlc.CreateUserPa
 	return user, nil
 }
 
-func (ur *SQLUserRepository) FindByUuid(ctx context.Context, uuid uuid.UUID) {
-	ur.db.GetUser(ctx, uuid)
-	log.Println("Find by ID")
+func (ur *SQLUserRepository) FindByUuid(ctx context.Context, uuid uuid.UUID) (sqlc.User, error) {
+	user, err := ur.db.GetUser(ctx, uuid)
+	if err != nil {
+		return sqlc.User{}, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return user, nil
 }
