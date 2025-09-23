@@ -5,14 +5,15 @@
 package sqlc
 
 import (
+	"time"
+
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type User struct {
-	UserID    int32              `json:"user_id"`
-	Uuid      uuid.UUID          `json:"uuid"`
-	Name      string             `json:"name"`
-	Email     string             `json:"email"`
-	CreatedAt pgtype.Timestamptz `json:"created_at"`
+	UserID    int32     `json:"user_id"`
+	Uuid      uuid.UUID `json:"uuid"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
 }
