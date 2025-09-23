@@ -5,9 +5,9 @@ import (
 	"hoc-gin/internal/dto"
 	"hoc-gin/internal/repository"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -21,13 +21,15 @@ func NewUserHandler(repo repository.UserRepository) *UserHandler {
 }
 
 func (uh *UserHandler) GetUserByUuid(ctx *gin.Context) {
-	id, err := strconv.Atoi(ctx.Param("id"))
+	uuidParam := ctx.Param("uuid")
+
+	userUUID, err := uuid.Parse(uuidParam)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invali user ID"})
 		return
 	}
 
-	uh.repo.FindById(id)
+	uh.repo.FindByUuid(ctx, userUUID)
 
 	ctx.JSON(http.StatusOK, gin.H{"data": "Get user by uuid"})
 }
